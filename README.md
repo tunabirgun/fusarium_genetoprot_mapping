@@ -1,17 +1,17 @@
-# fusarium_genetoprot_mapping# Gene ID Mapping Scripts
+# Gene ID Mapping Scripts
 
 Two mapping scripts for *Fusarium* species gene IDs to STRING protein IDs:
 
-1. **mapping.py** - Direct species mapping (non-orthology)
-2. **01.2_orthology_mapping_fpg2fg.py** - Orthology-based mapping
+1. **01.1_nonorth_mapping.py** - Direct species mapping (non-orthology)
+2. **01.2_orth_mapping.py** - Orthology-based mapping
 
 ## Overview
 
-### mapping.py (Direct Mapping)
+### 01.1_nonorth_mapping.py (Direct Mapping)
 
 Maps gene IDs directly from Excel files to STRING protein IDs for *F. graminearum* and *F. oxysporum* by matching gene ID prefixes.
 
-### 01.2_orthology_mapping_fpg2fg.py (Orthology Mapping)
+### 01.2_orth_mapping.py (Orthology Mapping)
 
 Maps *F. pseudograminearum* (FPse) gene IDs to STRING protein IDs using orthology inference through *F. graminearum* (FGSG) genes.
 
@@ -21,8 +21,8 @@ Before running either script, ensure the following directory structure exists:
 
 ```
 c:\Users\Tuna\Desktop\test\
-├── mapping.py                              # Direct mapping script
-├── 01.2_orthology_mapping_fpg2fg.py       # Orthology mapping script
+├── 01.1_nonorth_mapping.py                # Direct mapping script
+├── 01.2_orth_mapping.py                   # Orthology mapping script
 ├── input_data/                             # Input Excel files
 │   ├── 1_Downregulated_Genes.xlsx
 │   ├── 1_Upregulated_Genes.xlsx
@@ -54,10 +54,10 @@ c:\Users\Tuna\Desktop\test\
 - **Format**: Excel workbooks (.xlsx)
 - **Required column**: "gene" (case-insensitive, will be automatically trimmed)
 - **File naming convention**:
-  - **mapping.py**:
+  - **01.1_nonorth_mapping.py**:
     - Files starting with **1 or 2** → *F. graminearum*
     - Files starting with **3, 4, 5, 7, or 8** → *F. oxysporum*
-  - **01.2_orthology_mapping_fpg2fg.py**:
+  - **01.2_orth_mapping.py**:
     - Files starting with **6** → *F. pseudograminearum* to *F. graminearum* orthology mapping
 
 ### STRING Alias Files (string_data/)
@@ -71,7 +71,7 @@ c:\Users\Tuna\Desktop\test\
   - `229533.protein.aliases.v12.0.txt` → *F. graminearum*
   - `426428.protein.aliases.v12.0.txt` → *F. oxysporum*
 
-## Script 1: mapping.py (Direct Mapping)
+## Script 1: 01.1_nonorth_mapping.py (Direct Mapping)
 
 ### Configuration
 
@@ -106,7 +106,7 @@ SPECIES_CONFIG = {
 ### Usage
 
 ```bash
-python mapping.py
+python 01.1_nonorth_mapping.py
 ```
 
 ### Example Output
@@ -143,7 +143,7 @@ TOTAL:
 
 ---
 
-## Script 2: 01.2_orthology_mapping_fpg2fg.py (Orthology Mapping)
+## Script 2: 01.2_orth_mapping.py (Orthology Mapping)
 
 ### Configuration
 
@@ -174,7 +174,7 @@ ORTHOLOG_CONFIG = {
 ### Usage
 
 ```bash
-python 01.2_orthology_mapping_fpg2fg.py
+python 01.2_orth_mapping.py
 ```
 
 ### Example Output
@@ -215,12 +215,12 @@ TOTAL:
 
 All mapped files are saved to `mapped_data/` directory
 
-### Direct Mapping (mapping.py)
+### Direct Mapping (01.1_nonorth_mapping.py)
 
 - Naming pattern: `mapped_{original_filename}.tsv`
 - Example: `mapped_1_Downregulated_Genes.tsv`
 
-### Orthology Mapping (01.2_orthology_mapping_fpg2fg.py)
+### Orthology Mapping (01.2_orth_mapping.py)
 
 - Naming pattern: `mapped_ortholog_{original_filename}.tsv`
 - Example: `mapped_ortholog_6_Downregulated_Genes.tsv`
@@ -278,17 +278,17 @@ pip install pandas openpyxl
 
 ## Key Differences
 
-| Feature                  | mapping.py                   | orthology_mapping.py                  |
-| ------------------------ | ---------------------------- | ------------------------------------- |
-| **Use Case**             | Direct STRING mapping        | Cross-species orthology inference     |
-| **Supported Species**    | F. graminearum, F. oxysporum | F. pseudograminearum → F. graminearum |
-| **Mapping Method**       | Direct prefix matching       | Numeric ortholog inference            |
-| **Typical Success Rate** | 75-85%                       | 70-80%                                |
-| **Output Prefix**        | `mapped_`                    | `mapped_ortholog_`                    |
+| Feature                  | 01.1_nonorth_mapping.py           | 01.2_orth_mapping.py                  |
+| ------------------------ | --------------------------------- | ------------------------------------- |
+| **Use Case**             | Direct STRING mapping             | Cross-species orthology inference     |
+| **Supported Species**    | F. graminearum, F. oxysporum      | F. pseudograminearum → F. graminearum |
+| **Mapping Method**       | Direct prefix matching            | Numeric ortholog inference            |
+| **Typical Success Rate** | 75-85%                            | 70-80%                                |
+| **Output Prefix**        | `mapped_`                         | `mapped_ortholog_`                    |
 
 ---
 
-## Some Notes
+## Notes
 
 - Gene IDs are automatically converted to uppercase during processing
 - Empty or null values in the gene column are left unmapped
